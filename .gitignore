@@ -1,0 +1,14 @@
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.env
+.env.*
+*.gguf
+*.safetensors
+chroma_db/
+chroma/
+chroma.sqlite3
+*.npy
+*.npz
+.DS_Store
+data/
