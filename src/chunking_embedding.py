@@ -17,7 +17,7 @@ def save_json(data):
 
 def create_vector_db(embedded_data, chunk_ids, metadatas, chunked_documents):
     client = chromadb.PersistentClient(path="../data/chroma_db")
-    collection=client.get_or_create_collection(name="cancer_bioinformatics")
+    collection=client.get_or_create_collection(name="cancer_bioinformatics", metadata={"hnsw:space": "cosine"})
     batch_size = 10000
     
     for start in range(0, len(embedded_data), batch_size):
@@ -30,7 +30,7 @@ def create_vector_db(embedded_data, chunk_ids, metadatas, chunked_documents):
     print(f'Stored Collection: {collection.count()}')
     
 if __name__ == '__main__':
-    with open('../data/data_2.json', 'r') as f:
+    with open('../data/raw_data/data_2.json', 'r') as f:
         data = json.load(f)
     
     metadata, data_for_embedding = {}, {}
@@ -59,17 +59,18 @@ if __name__ == '__main__':
         chunked_documents.append(current_chunk)
         embedded_chunk = embed(sentence_embed_model, current_chunk)
         chunked_ids.append(chunk_id)
-        chunked_metadatas.append({"pmid": pmid, "chunk_id": int(chunk_id.split("_")[1]), "document": current_chunk, "author": metadata[pmid]['authors'], "title": metadata[pmid]['title'], "journal": metadata[pmid]['journal'], "publish_date": metadata[pmid]['publish_date']})
+        chunked_metadatas.append({"pmid": pmid, "chunk_id": int(chunk_id.split("_")[1]), "document": current_chunk, "author": ", ".join(metadata[pmid]['authors']), "title": metadata[pmid]['title'], "journal": metadata[pmid]['journal'], "publish_date": metadata[pmid]['publish_date']})
         embedded_chunks.append(embedded_chunk.tolist())
         save_data.append({"id": chunk_id, "embedding": embedded_chunk.tolist(), "document": current_chunk, "metadata": {"pmid": pmid, "chunk_id": int(chunk_id.split("_")[1]), "pmcid": metadata[pmid]['pmcid'], "author": metadata[pmid]['authors'], "title": metadata[pmid]['title'], "journal": metadata[pmid]['journal'], "publish_date": metadata[pmid]['publish_date']}})
     print("Embedding Done..")
     
-    print(len(chunked_ids))
+    """ print(len(chunked_ids))
     print(len(embedded_chunks))
     print(len(chunked_metadatas))
-    print(len(chunked_documents))
+    print(len(chunked_documents)) """
     
-    save_json(save_data)
+    #save_json(save_data)
     
-    #create_vector_db(embedded_data=embedded_chunks, chunk_ids=chunked_ids, metadatas=chunked_metadatas, chunked_documents=chunked_documents)
+    create_vector_db(embedded_data=embedded_chunks, chunk_ids=chunked_ids, metadatas=chunked_metadatas, chunked_documents=chunked_documents)
+    print('Vector DB has been created')
     

@@ -50,6 +50,8 @@ def generate_response(context, query):
                 'Do not create fake citations, authors, year of publications or makeup answers if not provided in the context. '
                 'Provide the correct citations when writing your answers. '
                 'Answer briefly, as if summarizing and providing citations with each summary. '
+                'Avoid repeating the same scientific findings across paragraphs. '
+                'Do not include a concluding paragraph unless it adds new information. '
                 'Write the names of the papers along with the author names and year of publication provided in the context in the form of a numbered list at the end.'
             )
         },
