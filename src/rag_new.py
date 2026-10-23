@@ -109,14 +109,19 @@ def main():
     #get the query and embed it
     query = str("How can machine learning models classify malignant and non-malignant cells using gene expression signatures from single-cell RNA sequencing data")
     embedded_query = embedding_model.encode_sentence(query)
+    
+    #load in the embeddings
     embedded_data = helper.read_json('../data/embeddings/embedded_data_2.json')
     
+    #get the top-k-chunks using similarity scores
     similarity_scores = vectorizer.get_similarity_scores(embedded_query, embedded_data)
     top_k_chunks = vectorizer.get_top_k_chunks(similarity_scores, k=25)
     
+    #helpful for quick lookup of the metadata of the local context
     chunk_lookup = helper.create_lookup(embedded_data)
     reranked_documents = [rank[1] for rank in reranker.rerank(query, top_k_chunks,chunk_lookup, 5)]
     
+    #generate the answer
     context = context_generator.generate(reranked_documents, chunk_lookup)
     response = llm_model.generate_response(context, query)
     print(response['choices'][0]['message']['content'])
