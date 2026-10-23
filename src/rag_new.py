@@ -126,8 +126,10 @@ class AI:
         decision = responses['choices'][0]['message']['content'].strip().upper()
         
         if  decision == 'YES':
+            print("Local knowledge is enough to answer this question.")
             return True
         elif decision == 'NO':
+            print("Local knowledge is not enough to answer this question.")
             return False
         else:
             raise ValueError(f"Unexpected error found: {decision}")
