@@ -49,7 +49,7 @@ class VectorDB:
 
     def get_similarity_scores(self, embedded_input, embedded_chunks):
         similarity_scores = []
-        for chunk in tqdm(embedded_chunks):
+        for chunk in embedded_chunks:
             current_embedding, chunk_id = chunk['embedding'], chunk['id']
             similarity_scores.append({'chunk_id': chunk_id, 'score': self.cosine_similarity(embedded_input, current_embedding)})
         return similarity_scores
@@ -129,7 +129,7 @@ class AI:
             print("Local knowledge is enough to answer this question.")
             return True
         elif decision == 'NO':
-            print("Local knowledge is not enough to answer this question.")
+            print("Local knowledge is not enough to answer this")
             return False
         else:
             raise ValueError(f"Unexpected error found: {decision}")
