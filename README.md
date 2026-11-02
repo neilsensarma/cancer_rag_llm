@@ -1,6 +1,6 @@
 # Cancer Bioinformatics RAG | Local LLM & Agentic AI
 
-A Retrieval-Augmented Generation (RAG) system for answering scientific questions in cancer bioinformatics using peer-reviewed biomedical literature. It combines semantic retrieval, cross-encoder reranking, local LLM inference, and developing external literature augmentation to produce evidence-grounded responses.
+A Retrieval-Augmented Generation (RAG) system for answering scientific questions in cancer bioinformatics using peer-reviewed biomedical literature. It combines semantic retrieval, cross-encoder reranking, local LLM inference, and external literature augmentation to produce evidence-grounded responses.
 
 ## Project Overview
 
@@ -50,15 +50,15 @@ A second-stage relevance model reranks query–passage pairs before prompting th
 - Model: Meta Llama 3.1 8B Instruct
 - Quantization: GGUF Q4_K_M
 - Inference engine: `llama-cpp-python`
-- Context window: 4,096 tokens
+- Context window: 8192 tokens
 - GPU acceleration: Apple Metal
 - Temperature: 0.2
 
 The highest-ranked passages are supplied as context to encourage literature-grounded responses.
 
-### 6. External literature augmentation (in development)
+### 6. External literature augmentation
 
-The project is being extended with evidence sufficiency checks and conditional retrieval through NCBI Entrez/PubMed when the local corpus is inadequate.
+When the local corpus has insufficient knowledge to answer the query, as checked by the Llama model, the pipeline then shifts to collect information from the source PubMed for API based retrieval after reformulating the query to match PubMed's gold standard way of searching. This is then further used to augment the local knowledge used to generate the final answer.
 
 ## Technology Stack
 
@@ -111,43 +111,6 @@ Evidence sufficiency assessment and the end-to-end conditional workflow are stil
 - Which computational methods investigate cancer-associated expression signatures?
 - How can machine learning support cancer biomarker discovery?
 
-## Project Status
-
-| Component | Status |
-|---|---|
-| Literature collection | Completed |
-| Chunking and embeddings | Completed |
-| Persistent ChromaDB storage | Completed |
-| Semantic retrieval | Completed |
-| Cross-encoder reranking | Completed |
-| Local Llama 3.1 inference | Completed |
-| Initial retrieval evaluation | Completed |
-| PubMed/Entrez integration | Implemented; refinement ongoing |
-| Evidence sufficiency assessment | In development |
-| Conditional agentic workflow | In development |
-| End-to-end agentic evaluation | Planned |
-
-## Future Work
-
-- Refine evidence sufficiency checks and conditional literature retrieval.
-- Improve citation consistency and source attribution.
-- Strengthen relevance judgments and expand the evaluation set.
-- Compare full agentic performance against the baseline RAG pipeline.
-- Reduce redundant retrieval and improve document diversity.
-
 ## Hardware
 
 Developed locally on a 14-inch MacBook Pro with Apple M2 Pro and 16 GB unified memory, using Metal acceleration where supported.
-
-## Disclaimer
-
-This is a biomedical research and machine-learning demonstration. Generated answers should be verified against primary literature and are not intended for clinical decision-making.
-
-## Author
-
-**Nilavrah Sensarma**  
-M.S. Computational Science and Engineering  
-Professional Master's in Bioinformatics  
-Georgia Institute of Technology
-
-[GitHub](https://github.com/neilsensarma) | [LinkedIn](https://www.linkedin.com/in/nilavra-sensarma/)
