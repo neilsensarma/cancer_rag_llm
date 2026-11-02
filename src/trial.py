@@ -1,9 +1,17 @@
-import json
+from Bio import Entrez
 
-if __name__ == '__main__':
-    with open('../data/embeddings/embedded_data_2.json', 'r') as f:
-        data = json.load(f)
-    
-    for i, chunk in enumerate(data):
-        print(chunk['metadata']['publish_date'])
-        break
+Entrez.email = "your_email@example.com"
+
+query = "cryptochrome 4 AND magnetoreception"
+
+with Entrez.esearch(
+    db="pubmed",
+    term=query,
+    retmax=5,
+    sort="relevance"
+) as handle:
+    results = Entrez.read(handle)
+
+print("Total results:", results["Count"])
+print("PMIDs:", results["IdList"])
+print("Query translation:", results.get("QueryTranslation"))
