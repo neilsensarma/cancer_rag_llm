@@ -205,7 +205,7 @@ class Generator:
                     'content':f'Context: {context} Question: {query}. Answer the question using the context provided to you'
                 }
             ], 
-            temperature = 0.2, max_tokens = 600
+            temperature = 0.2, max_tokens = 1000
         )
         
         return response
@@ -217,7 +217,7 @@ def main():
     #local_retriever = LocalRetriever()
     chromadb_retriever = ChromaDBRetrieval("../data/chroma_db", "cancer_bioinformatics")
     reranker = ReRanker(CrossEncoder("cross-encoder/ms-marco-MiniLM-L6-v2", device='mps'))
-    llama = Llama(model_path = "../models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf", n_ctx=4096, n_gpu_layers=-1, verbose=False)
+    llama = Llama(model_path = "../models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf", n_ctx=8192, n_gpu_layers=-1, verbose=False)
     ai = AI(llama)
     context_generator = Context()
     generator_model = Generator(llama)
@@ -227,7 +227,8 @@ def main():
     
     #get the query and embed it
     #query = "How can machine learning models classify malignant and non-malignant cells using gene expression signatures from single-cell RNA sequencing data"
-    query = "How do migratory birds use cryptochrome 4 proteins and quantum radical-pair mechanisms to detect Earth's magnetic field and navigate during migration?"
+    #query = "How do migratory birds use cryptochrome 4 proteins and quantum radical-pair mechanisms to detect Earth's magnetic field and navigate during migration?"
+    query = "How does the gut microbiome influence the development of Parkinson's disease through the gut-brain axis, particularly through microbial metabolites, neuroinflammation, and alpha-synuclein aggregation?"
     #embedded_query = embedding_model.encode_sentence(query).tolist()
     
     """ #load in the embeddings
